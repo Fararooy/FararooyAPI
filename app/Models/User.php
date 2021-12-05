@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(City::class);
     }
+
+    public function favouriteEvents(): HasMany
+    {
+        return $this->hasMany(FavouriteEvent::class);
+    }
 }

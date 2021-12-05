@@ -36,6 +36,4 @@ class Event extends Model
     {
         return $this->hasOne(City::class);
     }
-
-
 }
