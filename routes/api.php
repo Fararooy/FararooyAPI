@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::prefix('users')->group(function () {
+    Route::get('/{id}', [\App\Http\Controllers\UserController::class, 'find']);
+});
+
+Route::prefix('events')->group(function () {
+    Route::get('/{id}', [\App\Http\Controllers\EventController::class, 'find']);
+    Route::get('/all', [\App\Http\Controllers\EventController::class, 'all']);
+});

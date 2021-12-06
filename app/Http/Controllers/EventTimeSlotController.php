@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class EventPaymentController extends Controller
+class EventTimeSlotController extends Controller
 {
     /**
      * Display a listing of the resource.
