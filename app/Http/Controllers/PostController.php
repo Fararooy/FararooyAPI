@@ -2,22 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\APIResponseStatus;
-use App\Services\EventService;
-use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
 
-class EventController extends Controller
+class PostController extends Controller
 {
-    use APIResponseTrait;
-
-    private EventService $eventService;
-
-    public function __construct(EventService $eventService)
-    {
-        $this->eventService = $eventService;
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +13,7 @@ class EventController extends Controller
      */
     public function index()
     {
-
+        //
     }
 
     /**
@@ -92,15 +80,5 @@ class EventController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function getLatestEvents()
-    {
-        return $this->generateAPIResponse(
-            APIResponseStatus::SUCCESS,
-            $this->eventService->getLatestEvents(),
-            [],
-            200
-        );
     }
 }
