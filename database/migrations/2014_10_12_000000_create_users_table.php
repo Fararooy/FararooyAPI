@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('lastname');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('email_verified_at_jalali')->nullable(true);
             $table->string('username')->unique()->nullable();
             $table->foreignId('city_id')->nullable();
             $table->string('address')->nullable();
@@ -28,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->text('about_me');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('created_at_jalali')->nullable(true);
         });
     }
 

@@ -17,10 +17,12 @@ class CreateEventPaymentsTable extends Migration
             $table->id();
             $table->foreignId('ticket_id');
             $table->dateTime('payment_date');
+            $table->string('payment_date_jalali')->nullable(true);
             $table->string('bank_account_no')->default(null);
             $table->float('amount');
             $table->string('status');
             $table->timestamps();
+            $table->string('created_at_jalali')->nullable(true);
         });
     }
 

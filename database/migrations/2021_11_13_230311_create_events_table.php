@@ -19,7 +19,9 @@ class CreateEventsTable extends Migration
             $table->string('name')->nullable(false);
             $table->text('description')->nullable(true);
             $table->date('start_date')->nullable(false);
+            $table->string('start_date_jalali')->nullable(true);
             $table->date('end_date')->nullable(false);
+            $table->string('end_date_jalali')->nullable(false);
             $table->foreignId('city_id');
             $table->string('address')->nullable(true);
             $table->string('latitude')->nullable(true);
@@ -27,6 +29,7 @@ class CreateEventsTable extends Migration
             $table->float('price')->default(0);
             $table->integer('capacity')->nullable(true);
             $table->timestamps();
+            $table->string('created_at_jalali')->nullable(true);
         });
     }
 

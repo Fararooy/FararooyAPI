@@ -19,6 +19,7 @@ class CreateParticipantsTable extends Migration
             $table->foreignId('user_id');
             $table->string('status');
             $table->timestamps();
+            $table->string('created_at_jalali')->nullable(true);
         });
     }
 

@@ -2,18 +2,35 @@
 
 namespace App\Models;
 
+use App\Casts\DateTime\JalaliDateCast;
+use App\Casts\DateTime\JalaliDateTimeCast;
+use App\Casts\Digits\PersianDigitCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Event extends Model
 {
     use HasFactory;
 
-    protected $hidden = ['user_id'];
+    protected $hidden = [
+        'user_id',
+        'updated_at',
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'created_at_jalali' => JalaliDateTimeCast::class,
+        'start_date_jalali' => JalaliDateCast::class,
+        'end_date_jalali' => JalaliDateCast::class,
+        'price' => PersianDigitCast::class,
+        'capacity' => PersianDigitCast::class,
+        'participant_count' => PersianDigitCast::class,
+        'review_count' => PersianDigitCast::class,
+    ];
 
     public function user(): BelongsTo
     {
@@ -30,24 +47,20 @@ class Event extends Model
         return $this->hasMany(EventTimeSlot::class);
     }
 
-    public function eventCategories(): HasMany
+    public function city(): BelongsTo
     {
-        return $this->hasMany(EventCategory::class);
+        return $this->belongsTo(City::class);
     }
 
-    public function city(): HasOne
+    public function categories(): BelongsToMany
     {
-        return $this->hasOne(City::class);
+        return $this->belongsToMany(Category::class, 'event_categories');
     }
 
-    public function categories(): HasManyThrough
+    public function featuredCategory(): BelongsToMany
     {
-        return $this->hasManyThrough(
-            Category::class,
-            EventCategory::class,
-            'event_id',
-            'id'
-        );
+        return $this->belongsToMany(Category::class, 'event_categories')
+            ->where('event_categories.featured', true);
     }
 
     public function images(): HasMany

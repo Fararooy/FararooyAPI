@@ -19,8 +19,10 @@ class CreateTicketsTable extends Migration
             $table->string('bar_code_url')->nullable(true);
             $table->string('qr_code_url')->nullable(true);
             $table->dateTime('issue_date');
+            $table->string('issue_date_jalali')->nullable(true);
             $table->boolean('used')->default(false);
             $table->timestamps();
+            $table->string('created_at_jalali')->nullable(true);
         });
     }
 

@@ -2,10 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\APIResponseStatus;
+use App\Services\CategoryService;
+use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    use APIResponseTrait;
+
+    private CategoryService $categoryService;
+
+    public function __construct(CategoryService $categoryService)
+    {
+        $this->categoryService = $categoryService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -80,5 +92,15 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getTopCategories()
+    {
+        return $this->generateAPIResponse(
+            APIResponseStatus::SUCCESS,
+            $this->categoryService->getTopCategories(),
+            [],
+            200
+        );
     }
 }

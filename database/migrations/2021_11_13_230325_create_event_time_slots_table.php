@@ -17,9 +17,11 @@ class CreateEventTimeSlotsTable extends Migration
             $table->id();
             $table->foreignId('event_id');
             $table->date('time_slot_date');
+            $table->string('time_slot_date_jalali')->nullable(true);
             $table->time('start_time');
             $table->time('end_time');
             $table->timestamps();
+            $table->string('created_at_jalali')->nullable(true);
         });
     }
 

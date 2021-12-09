@@ -103,4 +103,14 @@ class EventController extends Controller
             200
         );
     }
+
+    public function getFeaturedEvents()
+    {
+        return $this->generateAPIResponse(
+            APIResponseStatus::SUCCESS,
+            $this->eventService->getFeaturedEvents(),
+            [],
+            200
+        );
+    }
 }

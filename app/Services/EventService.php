@@ -17,4 +17,9 @@ class EventService
     {
         return $this->eventRepository->getLatestEvents();
     }
+
+    public function getFeaturedEvents()
+    {
+        return $this->eventRepository->getFeaturedEvents();
+    }
 }
