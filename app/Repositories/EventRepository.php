@@ -36,4 +36,21 @@ class EventRepository implements EventRepositoryInterface
             ->limit(10)
             ->get();
     }
+
+    public function getEventsCount(): int
+    {
+        return Event::all()->count();
+    }
+
+    public function getFeaturedEventsCount(): int
+    {
+        return Event::where('featured', '=', 1)->count();
+    }
+
+    public function getFreeEventsCount(): int
+    {
+        return Event::where('price', '=', 0)
+            ->orWhere('price', '=', null)
+        ->count();
+    }
 }

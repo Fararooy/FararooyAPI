@@ -22,4 +22,19 @@ class EventService
     {
         return $this->eventRepository->getFeaturedEvents();
     }
+
+    public function getEventsCount(): int
+    {
+        return $this->eventRepository->getEventsCount();
+    }
+
+    public function getFeaturedEventsCount(): int
+    {
+        return $this->eventRepository->getFeaturedEventsCount();
+    }
+
+    public function getFreeEventsCount(): int
+    {
+        return $this->eventRepository->getFreeEventsCount();
+    }
 }
