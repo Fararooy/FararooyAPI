@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Interfaces\CategoryRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 
 class CategoryService
 {
@@ -13,7 +14,7 @@ class CategoryService
         $this->categoryRepository = $categoryRepository;
     }
 
-    public function getTopCategories()
+    public function getTopCategories(): Collection
     {
         return $this->categoryRepository->getTopCategories();
     }

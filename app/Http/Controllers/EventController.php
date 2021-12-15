@@ -6,6 +6,7 @@ use App\Enums\APIResponseStatus;
 use App\Services\EventService;
 use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
@@ -25,7 +26,21 @@ class EventController extends Controller
      */
     public function index()
     {
-
+        try {
+            return $this->generateAPIResponse(
+                APIResponseStatus::SUCCESS,
+                $this->eventService->getAllEvents(),
+                [],
+                200
+            );
+        } catch (\Exception $e) {
+            return $this->generateAPIResponse(
+                APIResponseStatus::FAILURE,
+                [],
+                [$e->getMessage()],
+                500
+            );
+        }
     }
 
     /**
@@ -52,12 +67,40 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        try {
+            $validator = Validator($request->all(), [
+                'id' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->generateAPIResponse(
+                    APIResponseStatus::FAILURE,
+                    [],
+                    [$validator->errors()->all()],
+                    400
+                );
+            }
+
+            $this->eventService->getEvent($request->input('id'));
+
+            return $this->generateAPIResponse(
+                APIResponseStatus::SUCCESS,
+                $this->eventService->getEvent($request->input('id')),
+                [],
+                200
+            );
+        } catch (\Exception $e) {
+            return $this->generateAPIResponse(
+                APIResponseStatus::FAILURE,
+                [],
+                [$e->getMessage()],
+                500
+            );
+        }
     }
 
     /**
@@ -96,21 +139,39 @@ class EventController extends Controller
 
     public function getLatestEvents()
     {
-        return $this->generateAPIResponse(
-            APIResponseStatus::SUCCESS,
-            $this->eventService->getLatestEvents(),
-            [],
-            200
-        );
+        try {
+            return $this->generateAPIResponse(
+                APIResponseStatus::SUCCESS,
+                $this->eventService->getLatestEvents(),
+                [],
+                200
+            );
+        } catch (\Exception $e) {
+            return $this->generateAPIResponse(
+                APIResponseStatus::FAILURE,
+                [],
+                [$e->getMessage()],
+                500
+            );
+        }
     }
 
     public function getFeaturedEvents()
     {
-        return $this->generateAPIResponse(
-            APIResponseStatus::SUCCESS,
-            $this->eventService->getFeaturedEvents(),
-            [],
-            200
-        );
+        try {
+            return $this->generateAPIResponse(
+                APIResponseStatus::SUCCESS,
+                $this->eventService->getFeaturedEvents(),
+                [],
+                200
+            );
+        } catch (\Exception $e) {
+            return $this->generateAPIResponse(
+                APIResponseStatus::FAILURE,
+                [],
+                [$e->getMessage()],
+                500
+            );
+        }
     }
 }

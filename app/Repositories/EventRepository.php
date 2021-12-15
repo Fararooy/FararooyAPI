@@ -4,10 +4,26 @@ namespace App\Repositories;
 
 use App\Interfaces\EventRepositoryInterface;
 use App\Models\Event;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EventRepository implements EventRepositoryInterface
 {
-    public function getLatestEvents()
+    public function getEvent(int $eventId): Model
+    {
+        return Event::with([
+            'categories',
+            'featuredCategory',
+            'images',
+            'featuredImage',
+            'city',
+            'eventTimeSlots',
+        ])->where('id', '=', $eventId)
+            ->first();
+    }
+
+    public function getLatestEvents(): Collection
     {
         return Event::with([
             'categories',
@@ -22,7 +38,7 @@ class EventRepository implements EventRepositoryInterface
             ->get();
     }
 
-    public function getFeaturedEvents()
+    public function getFeaturedEvents(): Collection
     {
         return Event::with([
             'categories',
@@ -52,5 +68,17 @@ class EventRepository implements EventRepositoryInterface
         return Event::where('price', '=', 0)
             ->orWhere('price', '=', null)
         ->count();
+    }
+
+    public function getAllEvents(): LengthAwarePaginator
+    {
+        return Event::with([
+            'categories',
+            'featuredCategory',
+            'images',
+            'featuredImage',
+            'city',
+            'eventTimeSlots',
+        ])->paginate(10);
     }
 }

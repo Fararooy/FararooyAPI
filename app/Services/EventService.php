@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Interfaces\EventRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Model;
 
 class EventService
 {
@@ -13,12 +16,22 @@ class EventService
         $this->eventRepository = $eventRepository;
     }
 
-    public function getLatestEvents()
+    public function getAllEvents(): LengthAwarePaginator
+    {
+        return $this->eventRepository->getAllEvents();
+    }
+
+    public function getEvent(int $eventId): Model
+    {
+        return $this->eventRepository->getEvent($eventId);
+    }
+
+    public function getLatestEvents(): Collection
     {
         return $this->eventRepository->getLatestEvents();
     }
 
-    public function getFeaturedEvents()
+    public function getFeaturedEvents(): Collection
     {
         return $this->eventRepository->getFeaturedEvents();
     }
