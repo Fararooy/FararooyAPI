@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\StatisticsController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavouriteEventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,12 @@ Route::middleware('cors')->prefix('events')->group(function () {
     Route::get('/latest', [EventController::class, 'getLatestEvents']);
     Route::get('/featured', [EventController::class, 'getFeaturedEvents']);
     Route::get('/', [EventController::class, 'index']);
+});
+
+Route::prefix('favourite-events')->group(function () {
+
+    Route::post('/add', [FavouriteEventController::class, 'addToFavourites']);
+
 });
 
 Route::middleware('cors')->prefix('posts')->group(function () {

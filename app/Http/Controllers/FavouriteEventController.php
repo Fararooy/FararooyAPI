@@ -2,10 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\FavouriteEventService;
 use Illuminate\Http\Request;
 
 class FavouriteEventController extends Controller
 {
+    private FavouriteEventService $favouriteEventService;
+
+    public function __construct(FavouriteEventService $favouriteEventService)
+    {
+        $this->favouriteEventService = $favouriteEventService;
+    }
+
+    public function addToFavourites(Request $request) {
+
+
+
+    }
+
     /**
      * Display a listing of the resource.
      *
