@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Casts\DateTime\JalaliDateCast;
 use App\Casts\DateTime\JalaliDateTimeCast;
 use App\Casts\Digits\PersianDigitCast;
+use App\Enums\Events\EventStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -31,6 +33,29 @@ class Event extends Model
         'participant_count' => PersianDigitCast::class,
         'review_count' => PersianDigitCast::class,
     ];
+
+    protected $appends = [
+        'status'
+    ];
+
+    public function getStatusAttribute()
+    {
+        $startDate = Carbon::createFromDate($this->attributes['start_date']);
+        $endDate = Carbon::createFromDate($this->attributes['end_date']);
+        $now = Carbon::now();
+
+        if ($endDate < $now) {
+            return EventStatus::CLOSED;
+        }
+
+        if ($startDate > $now) {
+            return EventStatus::NOT_STARTED;
+        }
+
+        if ($startDate < $now && $endDate > $now) {
+            return EventStatus::OPEN;
+        }
+    }
 
     public function user(): BelongsTo
     {

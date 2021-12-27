@@ -8,7 +8,7 @@ return [
         ],
 
         'display_format' => [
-            'jalali' => '%A, %d %B %Y'
+            'jalali' => '%d %B %Y'
         ],
     ],
 
@@ -18,7 +18,7 @@ return [
         ],
 
         'display_format' => [
-            'jalali' => '%A, %d %B %Y'
+            'jalali' => '%d %B %Y'
         ],
     ],
 

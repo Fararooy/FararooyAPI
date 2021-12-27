@@ -2,10 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\CityService;
+use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CityController extends Controller
 {
+    use APIResponseTrait;
+
+    protected CityService $cityService;
+
+    public function __construct(CityService $cityService)
+    {
+        $this->cityService = $cityService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +25,21 @@ class CityController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return $this->generateAPIResponse(
+                true,
+                $this->cityService->getAllCities(),
+                [],
+                Response::HTTP_OK
+            );
+        } catch (\Exception $exception) {
+            return $this->generateAPIResponse(
+                false,
+                [],
+                $exception->getCode(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**

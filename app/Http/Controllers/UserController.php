@@ -2,10 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\UserService;
+use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
+    use APIResponseTrait;
+
+    protected UserService $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -40,12 +52,25 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-        //
+        try {
+            return $this->generateAPIResponse(
+                true,
+                $this->userService->getUser(auth()->user()->id),
+                [],
+                Response::HTTP_OK
+            );
+        } catch (\Exception $exception) {
+            return $this->generateAPIResponse(
+                false,
+                [],
+                $exception->getCode(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**
@@ -63,12 +88,26 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        try {
+            $user = auth()->user();
+            return $this->generateAPIResponse(
+                true,
+                $this->userService->updateUser($user->id, $request->all()),
+                [],
+                Response::HTTP_OK
+            );
+        } catch (\Exception $exception) {
+            return $this->generateAPIResponse(
+                false,
+                [],
+                $exception->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**
@@ -80,5 +119,25 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function uploadProfileImage(Request $request)
+    {
+        try {
+            $user = auth()->user();
+            return $this->generateAPIResponse(
+                true,
+                $this->userService->uploadProfileImage($user->id, $request),
+                [],
+                Response::HTTP_OK
+            );
+        } catch (\Exception $exception) {
+            return $this->generateAPIResponse(
+                false,
+                [],
+                $exception->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }
