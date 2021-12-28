@@ -15,4 +15,11 @@ class FavouriteEventRepository implements FavouriteEventInterface
             'event_id' => $eventId,
         ]);
     }
+
+    public function removeFromFavourites(int $userId, int $eventId): bool
+    {
+        return FavouriteEvent::where('user_id', '=', $userId)
+            ->where('event_id', '=', $eventId)
+            ->delete();
+    }
 }

@@ -3,21 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Services\FavouriteEventService;
+use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class FavouriteEventController extends Controller
 {
+    use APIResponseTrait;
+
     private FavouriteEventService $favouriteEventService;
 
     public function __construct(FavouriteEventService $favouriteEventService)
     {
         $this->favouriteEventService = $favouriteEventService;
-    }
-
-    public function addToFavourites(Request $request) {
-
-
-
     }
 
     /**
@@ -30,14 +28,25 @@ class FavouriteEventController extends Controller
         //
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function create(Request $request)
     {
-        //
+        try {
+            $user = auth()->user();
+            return $this->generateAPIResponse(
+                true,
+                $this->favouriteEventService->addToFavourites($user->id, $request->input('event_id')),
+                [],
+                Response::HTTP_OK
+            );
+        } catch (\Exception $exception) {
+            return $this->generateAPIResponse(
+                false,
+                [],
+                $exception->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 
     /**
@@ -85,14 +94,24 @@ class FavouriteEventController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+
+    public function destroy(Request $request)
     {
-        //
+        try {
+            $user = auth()->user();
+            return $this->generateAPIResponse(
+                true,
+                $this->favouriteEventService->removeFromFavourites($user->id, $request->input('event_id')),
+                [],
+                Response::HTTP_OK
+            );
+        } catch (\Exception $exception) {
+            return $this->generateAPIResponse(
+                false,
+                [],
+                $exception->getMessage(),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
     }
 }

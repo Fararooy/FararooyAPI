@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavouriteEventController;
 use App\Http\Controllers\APIController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ParticipantController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +41,15 @@ Route::middleware(['cors', 'jwt.verify'])->prefix('users')->group(function () {
     Route::put('/', [UserController::class, 'update']);
     Route::delete('/', [UserController::class, 'destroy']);
     Route::post('/profile-image', [UserController::class, 'uploadProfileImage']);
-    Route::get('/events', [UserController::class, 'getUserEvents']);
+
+    Route::prefix('events')->group(function() {
+        Route::get('/', [UserController::class, 'getUserEvents']);
+    });
+});
+
+Route::middleware(['cors', 'jwt.verify'])->prefix('participants')->group(function () {
+    Route::post('/', [ParticipantController::class, 'create']);
+    Route::delete('/', [ParticipantController::class, 'destroy']);
 });
 
 Route::middleware(['cors'])->prefix('events')->group(function () {
@@ -51,7 +60,8 @@ Route::middleware(['cors'])->prefix('events')->group(function () {
 });
 
 Route::middleware(['cors', 'jwt.verify'])->prefix('favourite-events')->group(function () {
-    Route::post('/add', [FavouriteEventController::class, 'addToFavourites']);
+    Route::post('/', [FavouriteEventController::class, 'create']);
+    Route::delete('/', [FavouriteEventController::class, 'destroy']);
 });
 
 Route::middleware(['cors'])->prefix('posts')->group(function () {

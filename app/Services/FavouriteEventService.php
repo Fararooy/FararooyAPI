@@ -17,4 +17,9 @@ class FavouriteEventService
     {
         return $this->favouriteEventRepository->addToFavourites($userId, $eventId);
     }
+
+    public function removeFromFavourites(int $userId, int $eventId): bool
+    {
+        return $this->favouriteEventRepository->removeFromFavourites($userId, $eventId);
+    }
 }

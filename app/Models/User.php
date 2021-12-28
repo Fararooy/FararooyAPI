@@ -65,9 +65,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(City::class);
     }
 
-    public function favouriteEvents(): HasMany
+    public function favouriteEvents(): BelongsToMany
     {
-        return $this->hasMany(FavouriteEvent::class);
+        return $this->belongsToMany(Event::class, 'favourite_events');
     }
 
     public function registeredEvents(): BelongsToMany
