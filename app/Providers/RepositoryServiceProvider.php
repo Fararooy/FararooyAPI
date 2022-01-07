@@ -6,11 +6,13 @@ use App\Interfaces\CategoryRepositoryInterface;
 use App\Interfaces\CityRepositoryInterface;
 use App\Interfaces\EventRepositoryInterface;
 use App\Interfaces\FavouriteEventInterface;
+use App\Interfaces\ParticipantRepositoryInterface;
 use App\Interfaces\UserRepositoryInterface;
 use App\Repositories\CategoryRepository;
 use App\Repositories\CityRepository;
 use App\Repositories\EventRepository;
 use App\Repositories\FavouriteEventRepository;
+use App\Repositories\ParticipantRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +30,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(FavouriteEventInterface::class, FavouriteEventRepository::class);
         $this->app->bind(CityRepositoryInterface::class, CityRepository::class);
+        $this->app->bind(ParticipantRepositoryInterface::class, ParticipantRepository::class);
     }
 
     /**

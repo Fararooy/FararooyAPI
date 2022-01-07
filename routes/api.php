@@ -48,8 +48,8 @@ Route::middleware(['cors', 'jwt.verify'])->prefix('users')->group(function () {
 });
 
 Route::middleware(['cors', 'jwt.verify'])->prefix('participants')->group(function () {
-    Route::post('/', [ParticipantController::class, 'create']);
-    Route::delete('/', [ParticipantController::class, 'destroy']);
+    Route::post('/', [ParticipantController::class, 'register']);
+    Route::delete('/', [ParticipantController::class, 'deregister']);
 });
 
 Route::middleware(['cors'])->prefix('events')->group(function () {

@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Enums\Participants\ParticipantRegistrationStatus;
 
 class CreateParticipantsTable extends Migration
 {
@@ -17,7 +18,7 @@ class CreateParticipantsTable extends Migration
             $table->id();
             $table->foreignId('event_id');
             $table->foreignId('user_id');
-            $table->string('status');
+            $table->string('status')->default(ParticipantRegistrationStatus::REGISTERED);
             $table->timestamps();
             $table->string('created_at_jalali')->nullable(true);
         });

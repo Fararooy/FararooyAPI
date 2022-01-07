@@ -2,10 +2,91 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\APIResponseStatus;
+use App\Services\ParticipantService;
+use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class ParticipantController extends Controller
 {
+    use APIResponseTrait;
+
+    protected ParticipantService $participantService;
+
+    public function __construct(ParticipantService $participantService)
+    {
+        $this->participantService = $participantService;
+    }
+
+    public function register(Request $request)
+    {
+        try {
+            $validator = Validator($request->all(), [
+                'event_id' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response([
+                    'status' => 'failure',
+                    'content' => '',
+                    'error' => $validator->errors()->all()
+                ])->header('Content-Type', 'application/json');
+            }
+
+            return $this->generateAPIResponse(
+                APIResponseStatus::SUCCESS,
+                $this->participantService->register(
+                    $request->input('event_id'),
+                    auth()->id()
+                ),
+                [],
+                ResponseAlias::HTTP_OK
+            );
+        } catch (\Exception $e) {
+            return $this->generateAPIResponse(
+                APIResponseStatus::FAILURE,
+                [],
+                [$e->getMessage()],
+                ResponseAlias::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    public function deregister(Request $request)
+    {
+        try {
+            $validator = Validator($request->all(), [
+                'event_id' => 'required',
+            ]);
+
+            if ($validator->fails()) {
+                return response([
+                    'status' => 'failure',
+                    'content' => '',
+                    'error' => $validator->errors()->all()
+                ])->header('Content-Type', 'application/json');
+            }
+
+            return $this->generateAPIResponse(
+                APIResponseStatus::SUCCESS,
+                $this->participantService->deregister(
+                    $request->input('event_id'),
+                    auth()->id()
+                ),
+                [],
+                ResponseAlias::HTTP_OK
+            );
+        } catch (\Exception $e) {
+            return $this->generateAPIResponse(
+                APIResponseStatus::FAILURE,
+                [],
+                [$e->getMessage()],
+                ResponseAlias::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -23,7 +104,7 @@ class ParticipantController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
