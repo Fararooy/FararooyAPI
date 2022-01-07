@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use JWTAuth;
 
 class Event extends Model
 {
@@ -35,7 +36,8 @@ class Event extends Model
     ];
 
     protected $appends = [
-        'status'
+        'status',
+        'user_registered_for_event',
     ];
 
     public function getStatusAttribute()
@@ -57,14 +59,27 @@ class Event extends Model
         }
     }
 
+    public function getUserRegisteredForEventAttribute(): bool
+    {
+        try {
+            $authUser = JWTAuth::parseToken()->authenticate();
+            $participant = $this->participants()
+                ->where('participants.user_id', '=', $authUser->id)
+                ->count();
+            return $participant === 1;
+        } catch (\Exception $e) {
+            return false;
+        }
+     }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function eventParticipants(): HasMany
+    public function participants(): BelongsToMany
     {
-        return $this->hasMany(Participant::class);
+        return $this->belongsToMany(User::class, 'participants');
     }
 
     public function eventTimeSlots(): HasMany

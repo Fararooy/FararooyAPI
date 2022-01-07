@@ -7,32 +7,21 @@ use App\Models\Event;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 class EventRepository implements EventRepositoryInterface
 {
     public function getEvent(int $eventId): Model
     {
-        return Event::with([
-            'categories',
-            'featuredCategory',
-            'images',
-            'featuredImage',
-            'city',
-            'eventTimeSlots',
-        ])->where('id', '=', $eventId)
+        return $this->getEventQueryBuilder()
+            ->where('id', '=', $eventId)
             ->first();
     }
 
     public function getLatestEvents(): Collection
     {
-        return Event::with([
-            'categories',
-            'featuredCategory',
-            'images',
-            'featuredImage',
-            'city',
-            'eventTimeSlots',
-        ])->where('featured', '=', 0)
+        return $this->getEventQueryBuilder()
+            ->where('featured', '=', 0)
             ->orderByDesc('created_at')
             ->limit(10)
             ->get();
@@ -40,14 +29,8 @@ class EventRepository implements EventRepositoryInterface
 
     public function getFeaturedEvents(): Collection
     {
-        return Event::with([
-            'categories',
-            'featuredCategory',
-            'images',
-            'featuredImage',
-            'city',
-            'eventTimeSlots',
-        ])->where('featured', '=', 1)
+        return $this->getEventQueryBuilder()
+            ->where('featured', '=', 1)
             ->orderByDesc('created_at')
             ->limit(10)
             ->get();
@@ -72,6 +55,12 @@ class EventRepository implements EventRepositoryInterface
 
     public function getAllEvents(): LengthAwarePaginator
     {
+        return $this->getEventQueryBuilder()
+            ->paginate(10);
+    }
+
+    private function getEventQueryBuilder(): Builder
+    {
         return Event::with([
             'categories',
             'featuredCategory',
@@ -79,6 +68,11 @@ class EventRepository implements EventRepositoryInterface
             'featuredImage',
             'city',
             'eventTimeSlots',
-        ])->paginate(10);
+        ])
+            ->withCount([
+                'participants',
+                'reviews',
+                'categories',
+            ]);
     }
 }
