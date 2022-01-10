@@ -86,7 +86,7 @@ class APIController extends Controller
             $token = $jwt->attempt($credentials);
 
             if (!$token) {
-                return $this->generateAPIResponse(false, [], ['Invalid credentials'], Response::HTTP_BAD_REQUEST);
+                return $this->generateAPIResponse(false, [], ['Invalid credentials'], Response::HTTP_OK);
             }
 
         } catch (JWTException $e) {

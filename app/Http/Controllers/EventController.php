@@ -6,7 +6,7 @@ use App\Enums\APIResponseStatus;
 use App\Services\EventService;
 use App\Traits\APIResponseTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
 {
@@ -31,14 +31,14 @@ class EventController extends Controller
                 APIResponseStatus::SUCCESS,
                 $this->eventService->getAllEvents(),
                 [],
-                200
+                Response::HTTP_OK
             );
         } catch (\Exception $e) {
             return $this->generateAPIResponse(
                 APIResponseStatus::FAILURE,
                 [],
                 [$e->getMessage()],
-                500
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -81,7 +81,7 @@ class EventController extends Controller
                     APIResponseStatus::FAILURE,
                     [],
                     [$validator->errors()->all()],
-                    400
+                    Response::HTTP_OK
                 );
             }
 
@@ -91,14 +91,14 @@ class EventController extends Controller
                 APIResponseStatus::SUCCESS,
                 $this->eventService->getEvent($request->input('id')),
                 [],
-                200
+                Response::HTTP_OK
             );
         } catch (\Exception $e) {
             return $this->generateAPIResponse(
                 APIResponseStatus::FAILURE,
                 [],
                 [$e->getMessage()],
-                500
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -144,14 +144,14 @@ class EventController extends Controller
                 APIResponseStatus::SUCCESS,
                 $this->eventService->getLatestEvents(),
                 [],
-                200
+                Response::HTTP_OK
             );
         } catch (\Exception $e) {
             return $this->generateAPIResponse(
                 APIResponseStatus::FAILURE,
                 [],
                 [$e->getMessage()],
-                500
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
@@ -163,14 +163,14 @@ class EventController extends Controller
                 APIResponseStatus::SUCCESS,
                 $this->eventService->getFeaturedEvents(),
                 [],
-                200
+                Response::HTTP_OK
             );
         } catch (\Exception $e) {
             return $this->generateAPIResponse(
                 APIResponseStatus::FAILURE,
                 [],
                 [$e->getMessage()],
-                500
+                Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
     }
